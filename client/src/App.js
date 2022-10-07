@@ -12,7 +12,7 @@ function App() {
   const fetchTransactions = async () => {
     axios
       .get("http://localhost:5000/transaction")
-      .then((res) => setTransactions(res.data.reverse()))
+      .then((res) => setTransactions(res.data))
       .catch((err) => console.log(err));
   };
 

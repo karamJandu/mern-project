@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
-import Transaction from "./models/Transaction.js";
+import TransactionRouter from "./routes/transactions.js";
 
 const app = express();
 app.use(cors());
@@ -22,16 +22,5 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.post("/transaction", async (req, res) => {
-  const { amount, description, date } = req.body;
-  const transaction = new Transaction({ amount, description, date });
-  const result = await transaction.save();
-  res.json(result);
-});
-
-app.get("/transaction", async (req, res) => {
-  const transactions = await Transaction.find();
-  res.json(transactions);
-});
-
+app.use("/transaction", TransactionRouter);
 app.listen(5000, () => console.log("Server running on port 5000"));
