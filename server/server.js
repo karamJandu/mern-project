@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
-import TransactionRouter from "./routes/transactions.js";
+import TransactionApi from "./routes/TransactionApi.js";
 
 const app = express();
 app.use(cors());
@@ -22,5 +22,5 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use("/transaction", TransactionRouter);
+app.use("/transaction", TransactionApi);
 app.listen(5000, () => console.log("Server running on port 5000"));

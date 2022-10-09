@@ -30,8 +30,17 @@ function App() {
         description: formData.description,
         date: formData.date,
       })
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        setTransactions([...transactions, response.data]);
+      })
       .catch((error) => console.log(error));
+
+    // set the form data again
+    setFormData({
+      amount: 0,
+      description: "",
+      date: "",
+    });
   };
   return (
     <div>
