@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const [transactions, setTransactions] = useState([]);
-  const [formData, setFormData] = useState({
+  const initialForm = {
     amount: 0,
     description: "",
     date: "",
-  });
+  };
+
+  const [transactions, setTransactions] = useState([]);
+  const [formData, setFormData] = useState(initialForm);
 
   const fetchTransactions = async () => {
     axios
@@ -36,11 +38,7 @@ function App() {
       .catch((error) => console.log(error));
 
     // set the form data again
-    setFormData({
-      amount: 0,
-      description: "",
-      date: "",
-    });
+    setFormData(initialForm);
   };
   return (
     <div>
