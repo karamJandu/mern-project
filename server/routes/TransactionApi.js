@@ -15,4 +15,11 @@ router.get("/", async (req, res) => {
   res.json(transactions);
 });
 
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  const response = await Transaction.findByIdAndDelete(id);
+  console.log(response);
+  const message = response !== null ? "Success" : "Failed";
+  res.json({ message });
+});
 export default router;
