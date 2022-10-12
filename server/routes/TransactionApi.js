@@ -15,11 +15,22 @@ router.get("/", async (req, res) => {
   res.json(transactions);
 });
 
+router.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  const transaction = await Transaction.findOneAndUpdate(
+    { id },
+    { ...req.body },
+    { new: true }
+  );
+  transaction.save();
+  res.json({ message: "success" });
+});
+
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
   const response = await Transaction.findByIdAndDelete(id);
-  console.log(response);
   const message = response !== null ? "Success" : "Failed";
   res.json({ message });
 });
+
 export default router;

@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import dayjs from "dayjs";
 
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
@@ -27,6 +28,10 @@ const TransactionList = ({ transactions, fetchTransactions }) => {
         fetchTransactions();
       })
       .catch((err) => console.error(err));
+  };
+
+  const formatDate = (date) => {
+    return dayjs(date).format("DD MMM, YYYY");
   };
 
   return (
@@ -55,7 +60,7 @@ const TransactionList = ({ transactions, fetchTransactions }) => {
                   {transaction.description}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {transaction.date}
+                  {formatDate(transaction.date)}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   <IconButton
