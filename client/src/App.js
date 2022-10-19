@@ -7,6 +7,12 @@ import { Container } from "@mui/material";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
+  const [editTransaction, setEditTransaction] = useState({
+    id: "",
+    amount: "",
+    description: "",
+    date: new Date(),
+  });
 
   const fetchTransactions = () => {
     axios
@@ -21,10 +27,15 @@ function App() {
     <div>
       <AppBar />;
       <Container>
-        <TransactionForm fetchTransactions={fetchTransactions} />
+        <TransactionForm
+          fetchTransactions={fetchTransactions}
+          editTransaction={editTransaction}
+          setEditTransaction={setEditTransaction}
+        />
         <TransactionList
           transactions={transactions}
           fetchTransactions={fetchTransactions}
+          setEditTransaction={setEditTransaction}
         />
       </Container>
     </div>

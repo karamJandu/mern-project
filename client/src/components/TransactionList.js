@@ -14,9 +14,23 @@ import dayjs from "dayjs";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 
-const TransactionList = ({ transactions, fetchTransactions }) => {
+const TransactionList = ({
+  transactions,
+  fetchTransactions,
+  setEditTransaction,
+}) => {
   const editHandler = (key) => {
-    console.log(key);
+    axios
+      .get(`http://localhost:5000/transaction/${key}`)
+      .then((res) =>
+        setEditTransaction({
+          id: res.data._id,
+          amount: res.data.amount,
+          description: res.data.description,
+          date: res.data.date,
+        })
+      )
+      .catch((err) => console.error(err));
   };
 
   const deleteHandler = (key) => {
@@ -68,7 +82,6 @@ const TransactionList = ({ transactions, fetchTransactions }) => {
                     component="label"
                     onClick={() => editHandler(transaction._id)}
                   >
-                    <input hidden accept="image/*" type="file" />
                     <EditSharpIcon />
                   </IconButton>
                   <IconButton

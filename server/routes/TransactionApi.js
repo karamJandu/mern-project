@@ -15,14 +15,15 @@ router.get("/", async (req, res) => {
   res.json(transactions);
 });
 
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  const transactions = await Transaction.findById(id);
+  res.json(transactions);
+});
+
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
-  const transaction = await Transaction.findOneAndUpdate(
-    { id },
-    { ...req.body },
-    { new: true }
-  );
-  transaction.save();
+  await Transaction.updateOne({ _id: id }, { $set: req.body });
   res.json({ message: "success" });
 });
 

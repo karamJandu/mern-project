@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -9,7 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-const TransactionForm = ({ fetchTransactions }) => {
+const TransactionForm = ({
+  fetchTransactions,
+  editTransaction,
+  setEditTransaction,
+}) => {
   const initialForm = {
     amount: "",
     description: "",
@@ -22,24 +26,46 @@ const TransactionForm = ({ fetchTransactions }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    setFormData({
+      amount: editTransaction.amount,
+      description: editTransaction.description,
+      date: editTransaction.date,
+    });
+  }, [editTransaction]);
+
   const handleDate = (selectedDate) => {
     setFormData({ ...formData, date: selectedDate });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const clearHandler = () => {
+    setFormData(initialForm);
+    setEditTransaction(initialForm);
+  };
+
+  const updateTransaction = () => {
     axios
-      .post("http://localhost:5000/transaction", {
-        amount: formData.amount,
-        description: formData.description,
-        date: formData.date,
+      .put(`http://localhost:5000/transaction/${editTransaction.id}`, formData)
+      .then((response) => {
+        setEditTransaction(initialForm);
+        fetchTransactions();
       })
+      .catch((err) => console.error(err));
+  };
+
+  const addTransaction = () => {
+    if (formData.amount === "" || formData.description === "") return;
+    axios
+      .post("http://localhost:5000/transaction", formData)
       .then((response) => {
         fetchTransactions();
       })
       .catch((error) => console.log(error));
+  };
 
-    // set the form data again
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    editTransaction.amount !== "" ? updateTransaction() : addTransaction();
     setFormData(initialForm);
   };
 
@@ -84,8 +110,11 @@ const TransactionForm = ({ fetchTransactions }) => {
               )}
             ></DesktopDatePicker>
           </LocalizationProvider>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" sx={{ marginRight: 5 }}>
             Submit
+          </Button>
+          <Button type="button" onClick={clearHandler} variant="contained">
+            Clear
           </Button>
         </form>
       </CardContent>
